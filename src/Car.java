@@ -5,7 +5,7 @@ import java.util.Vector;
 
 public abstract class Car implements Moveable{
 
-    private double handling = 90;
+    private static final double handling = 90;
 
     private double current_degree = 90;
 
@@ -15,15 +15,17 @@ public abstract class Car implements Moveable{
     private Color color; // Color of the car
     private final String modelName; // The car model name
 
-    private Point2D.Double position = new Point2D.Double(0, 0);
+    private Point2D.Double position;
 
-    private Point2D.Double direction = new Point2D.Double(0,1);
+    private Point2D.Double direction;
 
     public Car(int nrDoors, double enginePower, Color color, String modelName) {
         this.nrDoors = nrDoors;
         this.enginePower = enginePower;
         this.color = color;
         this.modelName = modelName;
+        position = new Point2D.Double(0, 0);
+        direction = new Point2D.Double(0,1);
         stopEngine();
     }
 
@@ -72,17 +74,37 @@ public abstract class Car implements Moveable{
         if(amount>=0 && amount<= 1){
             incrementSpeed(amount);
         }
+        else {
+            throw new IllegalArgumentException(amount + " not allowed as an argument");
+        }
     }
 
     public void brake(double amount){
         if(amount>=0 && amount<= 1){
             decrementSpeed(amount);
         }
+        else {
+            throw new IllegalArgumentException(amount + " not allowed as an argument");
+        }
+    }
+
+    public Point2D.Double getPosition(){
+        return position;
+    }
+
+    public Point2D.Double getDirection(){
+        return direction;
+    }
+
+
+    protected void setPosition(double newX, double newY){
+        position.setLocation(newX, newY);
     }
 
     public void move(){
-        position.setLocation(getCurrentSpeed() * direction.getX(),
-                getCurrentSpeed() * direction.getY());
+        double newX = getCurrentSpeed() * getDirection().getX() + getPosition().getX();
+        double newY = getCurrentSpeed() * getDirection().getY() + getPosition().getY();
+        setPosition(newX, newY);
     }
     public void turnLeft(){
         current_degree += handling;
@@ -95,13 +117,7 @@ public abstract class Car implements Moveable{
                 Math.round(Math.sin(Math.toRadians(current_degree))));
     }
 
-    public Point2D.Double getPosition(){
-        return position;
-    }
 
-    public Point2D.Double getDirection(){
-        return direction;
-    }
 }
 
 

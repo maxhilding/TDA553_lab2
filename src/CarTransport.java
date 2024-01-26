@@ -2,16 +2,16 @@
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.*;
-public class CarTransport extends Truck {
+public class CarTransport extends Truck implements Loadable<Car>{
     private boolean bedIsUp = true;
     private Stack<Car> loadedCars;
     
     private final int maxNumberOfLoadedCars;
 
-    public CarTransport() {
-        super(2, 800, Color.green, "Einride CarTransport Pro"); //a specific type of car transport, like Saab95
+    public CarTransport(int maxLoad, String name) {
+        super(2, 800, Color.green, name); //a specific type of car transport, like Saab95
         loadedCars = new Stack<Car>();
-        maxNumberOfLoadedCars = 7;
+        maxNumberOfLoadedCars = maxLoad;
         raiseBed();
     }
 
@@ -54,14 +54,22 @@ public class CarTransport extends Truck {
             "move" method.
             */
         }
+        else {
+                throw new RuntimeException("Can't load car");
+            }
+
     }
 
 
-    public void loadOff(){
+    public Car loadOff(){
         if (!bedIsUp){
             Car releasedCar = loadedCars.pop();
             releasedCar.setPosition(this.getPosition().getX()-1, this.getPosition().getY()-1);
+            return releasedCar;
             //releasedCar.position = new Point2D.Double(this.getPosition().getX(), this.getPosition().getY()-1);
+        }
+        else{
+            throw new RuntimeException("Can't unload car");
         }
     }
 

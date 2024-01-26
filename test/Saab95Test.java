@@ -103,10 +103,38 @@ public class Saab95Test {
     }
 
     @Test
+    public void testGasThrowsExceptionTooLarge() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                mySaab.gas(2));
+        assertTrue(exception.getMessage().contains("2.0 not allowed as an argument"));
+    }
+
+    @Test
+    public void testGasThrowsExceptionTooSmall() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                mySaab.gas(-1));
+        assertTrue(exception.getMessage().contains("-1.0 not allowed as an argument"));
+    }
+
+    @Test
     public void testBrake() {
         mySaab.gas(0.5);
         mySaab.brake(1);
         assertEquals(0, mySaab.getCurrentSpeed(), 0);
+    }
+
+    @Test
+    public void testBrakeThrowsExceptionTooLarge() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                mySaab.brake(2));
+        assertTrue(exception.getMessage().contains("2.0 not allowed as an argument"));
+    }
+
+    @Test
+    public void testBrakeThrowsExceptionTooSmall() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                mySaab.brake(-1));
+        assertTrue(exception.getMessage().contains("-1.0 not allowed as an argument"));
     }
 
     @Test

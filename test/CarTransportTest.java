@@ -13,11 +13,11 @@ public class CarTransportTest {
 
     @Before
     public void setUp() {
-        myTransport = new CarTransport();
+        myTransport = new CarTransport(7, "Transporter Pro");
         saab = new Saab95();
         volvo = new Volvo240();
         scania = new Scania();
-        transporter2 = new CarTransport();
+        transporter2 = new CarTransport(1,"Transporter Basic");
     }
 
 
@@ -61,15 +61,14 @@ public class CarTransportTest {
     public void testCantLoadCarWhenTooFar() {
         saab.setPosition(5,5);
         myTransport.setPosition(0,0);
-        myTransport.loadOn(saab);
-        assertEquals(0, myTransport.getLoadedCars().size());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> myTransport.loadOn(saab));
+        assertTrue(exception.getMessage().contains("Can't load car"));
     }
 
     @Test
     public void testCantLoadTrucks () {
-        myTransport.loadOn(scania);
-        myTransport.loadOn(transporter2);
-        assertEquals(0, myTransport.getLoadedCars().size());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> myTransport.loadOn(scania));
+        assertTrue(exception.getMessage().contains("Can't load car"));
     }
 
     @Test
@@ -89,8 +88,17 @@ public class CarTransportTest {
         myTransport.loadOn(saab);
         myTransport.raiseBed();
         myTransport.gas(0.5);
-        myTransport.loadOff();
-        assertEquals(1, myTransport.getLoadedCars().size());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> myTransport.loadOff());
+        assertTrue(exception.getMessage().contains("Can't unload car"));
+    }
+
+    @Test
+    public void testLoadOffNotWorkWhenBedIsUp() {
+        myTransport.lowerBed();
+        myTransport.loadOn(saab);
+        myTransport.raiseBed();
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> myTransport.loadOff());
+        assertTrue(exception.getMessage().contains("Can't unload car"));
     }
 
     @Test
@@ -108,6 +116,15 @@ public class CarTransportTest {
         myTransport.loadOn(volvo);
         myTransport.loadOff();
         assertTrue(myTransport.getLoadedCars().pop() instanceof Saab95);
+    }
+
+    @Test
+    public void testCarTransportIsFull(){
+        transporter2.lowerBed();
+        transporter2.loadOn(saab);
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> transporter2.loadOn(volvo));
+        assertTrue(exception.getMessage().contains("Can't load car"));
+
     }
 
 }

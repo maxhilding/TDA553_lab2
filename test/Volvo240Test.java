@@ -91,10 +91,38 @@ public class Volvo240Test {
     }
 
     @Test
+    public void testGasThrowsExceptionTooLarge() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                myVolvo.gas(2));
+        assertTrue(exception.getMessage().contains("2.0 not allowed as an argument"));
+    }
+
+    @Test
+    public void testGasThrowsExceptionTooSmall() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                myVolvo.gas(-1));
+        assertTrue(exception.getMessage().contains("-1.0 not allowed as an argument"));
+    }
+
+    @Test
     public void testBrake() {
         myVolvo.gas(0.5);
         myVolvo.brake(1);
         assertEquals(0, myVolvo.getCurrentSpeed(), 0);
+    }
+
+    @Test
+    public void testBrakeThrowsExceptionTooLarge() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                myVolvo.brake(2));
+        assertTrue(exception.getMessage().contains("2.0 not allowed as an argument"));
+    }
+
+    @Test
+    public void testBrakeThrowsExceptionTooSmall() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                myVolvo.brake(-1));
+        assertTrue(exception.getMessage().contains("-1.0 not allowed as an argument"));
     }
 
     @Test
