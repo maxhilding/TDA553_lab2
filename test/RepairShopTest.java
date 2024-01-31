@@ -19,9 +19,9 @@ public class RepairShopTest {
         saab = new Saab95();
         volvo1 = new Volvo240();
         volvo2 = new Volvo240();
-        volvo240RepairShop = new RepairShop(10, "Volvo Repair Shop");
-        anyCarsRepairShop = new RepairShop(10, "Every Car Repair Shop");
-        anyCarShopLow = new RepairShop(1, "Low Capacity");
+        volvo240RepairShop = new RepairShop<>(10, "Volvo Repair Shop");
+        anyCarsRepairShop = new RepairShop<>(10, "Every Car Repair Shop");
+        anyCarShopLow = new RepairShop<>(1, "Low Capacity");
     }
 
     @Test
